@@ -618,7 +618,7 @@ export default function App() {
                 <h1 style={{
                   fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(30px, 5vw, 52px)",
                   lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 20px", fontWeight: 700,
-                }}>Most founders over tool early<br />and under system later.</h1>
+                }}>Build the stack for where you are,<br />not where you might be.</h1>
                 <p style={{
                   color: C.onInkMuted, fontSize: "clamp(15px, 2vw, 18px)", lineHeight: 1.6,
                   maxWidth: 560, margin: "0 0 28px",
