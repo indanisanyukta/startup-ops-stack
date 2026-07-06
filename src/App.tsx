@@ -91,7 +91,7 @@ const CATALOGUE = [
       ? "One home for everything before you have the headcount to specialise. Free plan has no page limit for solo use."
       : "A single source of truth so context stops living only in people's heads. Ends the same question being asked five times.",
     vsObvious: "Over a pile of Google Docs, because databases and templates turn notes into reusable systems.",
-    tip: "Apply to Notion for Startups for up to $6,000 in credit before you pay anything.",
+    tip: "Notion for Startups: up to 6 months of Business + AI free for eligible new non-paying startups.",
   },
   {
     layer: "Foundation", name: "Google Workspace", role: "Email, docs, drive, calendar",
@@ -121,7 +121,7 @@ const CATALOGUE = [
     when: (t, a) => a.team !== "solo",
     reason: (a) => a.style === "async"
       ? "Channels keep decisions searchable instead of buried in DMs. Set it quiet, keep the record."
-      : "Fast coordination without another meeting. Free tier holds up until past 20 people.",
+      : "Fast coordination without another meeting. Free tier is generous, but it starts to strain once teams grow past ~20 people.",
     vsObvious: "Over WhatsApp for work, because search and channels mean context does not vanish up the scroll.",
   },
   {
@@ -167,7 +167,7 @@ const CATALOGUE = [
   },
   {
     layer: "Growth", name: "Instantly", role: "Cold email sequences",
-    price: "From ~£35/mo (flat)", url: "https://instantly.ai/pricing",
+    price: "From ~£35/mo", url: "https://instantly.ai/pricing",
     when: (t, a) => t.has("gtm") && t.has("funded"),
     reason: () => "When outbound becomes a real channel, Instantly keeps sequencing simple with flat pricing that suits a lean team. Lemlist is the pricier, more polished option once outbound is a dedicated function.",
     vsObvious: "Over Lemlist for an early team, because flat pricing beats per-seat when you are small and watching spend.",
@@ -187,7 +187,7 @@ const CATALOGUE = [
   },
   {
     layer: "Growth", name: "Buffer", role: "Schedule social, build in public",
-    price: "Free tier · paid from ~£4.50/channel/mo", url: "https://buffer.com/pricing",
+    price: "Free tier · paid from ~£4/channel/mo", url: "https://buffer.com/pricing",
     when: (t, a) => t.has("gtm") && a.stage !== "scaling",
     reason: () => "Early distribution is often the founder posting consistently. Scheduling removes the daily friction so it actually happens. Note it is priced per channel, so costs rise with each account.",
   },
@@ -218,7 +218,7 @@ const CATALOGUE = [
   },
   {
     layer: "Design", name: "Pitch", role: "Collaborative pitch and sales decks",
-    price: "Free tier · paid from ~£12/user", url: "https://pitch.com/pricing",
+    price: "Free tier · paid from ~£16/mo", url: "https://pitch.com/pricing",
     when: (t, a) => t.has("design") || t.has("gtm") || t.has("finance"),
     reason: () => "Founders live in decks: investor, sales, hiring. Pitch makes them look designed without the PowerPoint fight, and the team can work in one live at once.",
     vsObvious: "Over PowerPoint or raw Google Slides, because the templates and live collaboration save real hours on the decks you rebuild constantly.",
@@ -239,7 +239,7 @@ const CATALOGUE = [
   // ===================== PRODUCT =====================
   {
     layer: "Product", name: "Linear", role: "Issue tracking and product planning",
-    price: "Free tier · paid from ~£9/user", url: "https://linear.app/pricing",
+    price: "Free tier · paid from ~£8/user", url: "https://linear.app/pricing",
     when: (t, a) => t.has("product") || a.stage === "mvp" || a.stage === "scaling",
     reason: (a) => a.problem === "building"
       ? "Direction comes from a clear, reorderable queue, not more meetings. Fast enough that engineers actually keep it current."
@@ -260,7 +260,7 @@ const CATALOGUE = [
   },
   {
     layer: "Product", name: "Tagged feedback database", role: "Capture and theme user feedback",
-    price: "Free in Notion · Dovetail free & paid", url: "https://dovetail.com/pricing",
+    price: "Free in Notion · Dovetail paid", url: "https://dovetail.com/pricing",
     when: (t) => t.has("product") || t.has("validate"),
     reason: (a) => a.budget === "zero"
       ? "A tagged Notion database does most of this for free. Structure feedback so patterns surface before you spend on a dedicated tool."
@@ -282,7 +282,7 @@ const CATALOGUE = [
   // ===================== OPERATIONS =====================
   {
     layer: "Operations", name: "Zapier or Make", role: "Automate handoffs between tools",
-    price: "Free tier · paid from ~£20/mo", url: "https://zapier.com/pricing",
+    price: "Free tier · paid from ~£7/mo (Make) or ~£25/mo (Zapier)", url: "https://zapier.com/pricing",
     when: (t) => t.has("ops") || t.has("systemise") || t.has("scale"),
     reason: () => "Every manual copy-paste between two tools is a task that will eventually be forgotten. Automate the handoffs first, the clever stuff never.",
     vsObvious: "Make is cheaper and more flexible for complex flows. Zapier is simpler if you just want it working today.",
@@ -317,7 +317,7 @@ const CATALOGUE = [
   },
   {
     layer: "Operations", name: "Miro or FigJam", role: "Workshops and strategy mapping",
-    price: "Free tier · paid from ~£6/user", url: "https://miro.com/pricing",
+    price: "Free tier · paid from ~£5/user", url: "https://miro.com/pricing",
     when: (t, a) => (t.has("structured-need") || t.has("structured")) && a.team !== "solo",
     reason: () => "When you need to map a process, run a planning session, or think visually as a team, a shared canvas beats a doc. FigJam is free if you are already in Figma.",
     vsObvious: "FigJam over Miro if you already use Figma, since it is included. Miro if you want the deeper workshop features.",
@@ -339,10 +339,10 @@ const CATALOGUE = [
   },
   {
     layer: "Customer Support", name: "Plain", role: "Lightweight, fast customer support",
-    price: "Free tier · paid from ~£25/seat", url: "https://www.plain.com/pricing",
+    price: "No free tier · paid from ~£25/seat", url: "https://www.plain.com/pricing",
     when: (t, a) => t.has("support") && (t.has("product") || a.stage === "launched" || a.stage === "scaling"),
-    reason: () => "Support tooling that feels like Linear: fast, clean, built for product-led teams rather than call centres. The right first support tool for a technical early team.",
-    vsObvious: "Over Intercom or Zendesk early, because those are heavy and priced for scale you do not have yet.",
+    reason: () => "Support tooling that feels like Linear: fast, clean, and built for product-led teams rather than call centres. A good first support tool for a technical early team.",
+    vsObvious: "Over Intercom or Zendesk early, because it is lighter to run and better aligned with B2B SaaS workflows.",
   },
 
   // ===================== FINANCE =====================
@@ -355,7 +355,7 @@ const CATALOGUE = [
   },
   {
     layer: "Finance", name: "Xero", role: "Bookkeeping and invoicing",
-    price: "From ~£16/mo", url: "https://www.xero.com/uk/pricing",
+    price: "From ~£7/mo (Simple) or ~£16/mo (Ignite)", url: "https://www.xero.com/uk/pricing",
     when: (t, a) => t.has("finance") && (a.stage === "launched" || a.stage === "scaling" || t.has("funded")),
     reason: () => "Clean books now save a painful cleanup at your first raise or year end. Non-negotiable once real money is moving. Stronger in the UK than QuickBooks, which is the main alternative.",
     vsObvious: "Over QuickBooks for a UK company, because Xero's interface and local fit are cleaner. QuickBooks is the alternative if you prefer it.",
@@ -368,7 +368,7 @@ const CATALOGUE = [
   },
   {
     layer: "Finance", name: "Pleo", role: "Company cards and spend control",
-    price: "Free tier · paid from ~£9/user", url: "https://www.pleo.io/en/pricing",
+    price: "Free trial · Starter from ~£9.50/mo · Essential £45/mo", url: "https://www.pleo.io/en/pricing",
     when: (t, a) => t.has("finance") && (a.team === "growing" || a.team === "established" || t.has("funded")),
     reason: () => "Once more than one person spends money, per-person cards with built-in limits and receipt capture beat chasing expense claims. Pleo is UK and EU native. Ramp is the US alternative.",
     vsObvious: "Over Ramp or Brex for a UK team, because Pleo is built for UK and EU, while Ramp and Brex are US-first.",
@@ -405,13 +405,13 @@ const CATALOGUE = [
   },
   {
     layer: "People", name: "Tally or Typeform", role: "Application and intake forms",
-    price: "Tally free · Typeform from ~£20/mo", url: "https://tally.so/pricing",
+    price: "Tally free · Typeform from ~£30/mo", url: "https://tally.so/pricing",
     when: (t) => t.has("people"),
     reason: () => "A clean application form that people actually finish, feeding straight into your pipeline. Tally covers it free, Typeform is the paid option if you want its polish.",
   },
   {
     layer: "People", name: "Deel", role: "Payroll and contractor management",
-    price: "Payroll from ~£21/employee/mo · contractors ~£35 each", url: "https://www.deel.com/pricing",
+    price: "Contractors from ~£35 each/mo; EOR from ~£445/employee/mo", url: "https://www.deel.com/pricing",
     when: (t, a) => t.has("people") && (a.team === "growing" || a.team === "established"),
     reason: () => "Paying people correctly and on time is not where you want to improvise. Deel is strong for UK and international contractors, and has grown into a fuller HR platform with a Core HRIS from ~£4/employee and hiring tools layered on, so it scales as your team does. Gusto is the US-focused alternative.",
     vsObvious: "Over Gusto for a UK or international team, because Gusto is US-focused while Deel handles cross-border hiring cleanly.",

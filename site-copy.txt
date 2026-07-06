@@ -1,0 +1,473 @@
+STARTUP OPS STACK — ALL WEBSITE TEXT
+(For review/corrections. Section labels in CAPS are not on-site text, just
+markers so I can find the right spot in code when you send corrections.)
+=============================================================================
+
+HEADER
+-----------------------------------------------------------------------------
+Title:      Startup Ops Stack
+Subtitle:   For early stage founders. Five questions, then a lean stack built
+            around your real problem and your budget.
+Badge:      by Sanyukta Indani
+
+
+HERO (intro screen, before first question)
+-----------------------------------------------------------------------------
+Headline:   Build the stack for where you are,
+            not where you might be.
+
+Body:       Tell it your stage, your team, and the one thing actually slowing
+            you down. It recommends a lean stack built around that problem,
+            sized to your budget, with the reasoning for every pick and where
+            the free option is good enough.
+
+Button:     Build my stack →
+
+Footer note: Shaped by working alongside founders at two early stage startups,
+            where the right lightweight system usually beat the expensive one
+            nobody kept up.
+
+
+QUESTIONS (5 total)
+-----------------------------------------------------------------------------
+
+Q1: Stage
+Prompt:  Where is the company right now?
+Help:    This decides how much process you actually need. Too much too early
+         is its own drag.
+Options:
+  - Still figuring it out — Pre-product, validating the idea
+  - Building the first version — MVP in progress, pre-launch
+  - Launched with early users — Some traction, maybe some revenue
+  - Growing fast - Revenue climbing, starting to hire
+
+Q2: Team
+Prompt:  Who is actually doing the work?
+Help:    Team size decides whether you need coordination tools or just a
+         shared doc and good habits.
+Options:
+  - Just me — Solo or a co-founder
+  - A tight team — 3 to 8 people
+  - A growing team — 9 to 20 people
+  - Getting sizeable — 20+ people
+
+Q3: The real problem
+Prompt:  What is genuinely keeping you up at night?
+Help:    Pick the one thing that, if it were fixed tomorrow, would unblock
+         the most. The stack is built around this.
+Options:
+  - I can't find enough customers — Growth and go to market
+  - I'm not sure we're building the right thing — Product direction and feedback
+  - I'm drowning in busywork — Admin and manual tasks eat the day
+  - Things keep falling through the cracks — No system, stuff gets forgotten
+  - We can't keep up with customers — Support and inbound messages
+  - We look amateur next to competitors — Brand, design, and positioning
+  - Runway and fundraising — Cash, investors, finance
+  - Hiring is chaos — Finding and onboarding people
+
+Q4 — Budget
+Prompt:  What can you spend on tools each month?
+Help:    Early on, free tiers and startup credits cover far more than
+         founders expect. This filters out overkill.
+Options:
+  - Basically nothing — Free tiers and credits only
+  - A little — Under £150 a month
+  - We have some budget — £150 to £800 a month
+
+Q5 — Ways of working
+Prompt:  How does the team like to work?
+Help:    A stack the team resents is a stack nobody updates. This tunes the
+         picks for fit.
+Options:
+  - Async and written — Docs over meetings
+  - Fast and scrappy — Move first, tidy later
+  - Structured — Clear process and owners
+
+
+RESULTS SCREEN — HEADLINES (one shown, based on "real problem" answer)
+-----------------------------------------------------------------------------
+[customers] Your stack is built to find and keep customers. Everything else
+            stays deliberately light so it does not pull focus from growth.
+
+[building]  Your stack is built for tight feedback loops and clear direction.
+            The goal is learning fast and building the right thing, with
+            minimal overhead.
+
+[busywork]  Your stack is built to hand the busywork to systems. Automate the
+            repetitive handoffs first, and free the founder's hours back up.
+
+[cracks]    Your stack is built to stop things falling through the cracks.
+            The fix is owners and repeatable processes, not more tools.
+
+[support]   Your stack is built to keep up with customers without a heavy
+            help desk. Give every message an owner and nothing slips.
+
+[brand]     Your stack is built to look as credible as you are. A sharp
+            brand and site do a surprising amount of selling before you say
+            a word.
+
+[money]     Your stack is built for financial clarity and fundraising
+            readiness. Clean numbers and organised investor work come first.
+
+[hiring]    Your stack is built to make hiring repeatable. A clear pipeline
+            and a real onboarding process do most of the heavy lifting.
+
+
+RESULTS SCREEN — OTHER TEXT
+-----------------------------------------------------------------------------
+Section label:  Your recommended stack · [N] tools across [N] layers
+Buttons:        Copy stack   /   Copied ✓   /   Save as PDF   /   Start over
+Rule-of-thumb note (bottom):
+  Rule of thumb: stand up the top two layers first, get them working, then
+  add the rest. A stack you actually maintain beats a perfect one you
+  abandon.
+
+Pricing disclaimer (bottom):
+  Pricing is indicative, shown in GBP as approximate tiers, verified
+  July 2026. SaaS pricing changes often, so treat these as a guide and
+  confirm current numbers on each tool's own site (every tool name links to
+  its pricing page).
+
+
+SIDEBAR (shown while answering questions, before results)
+-----------------------------------------------------------------------------
+Label:        Your stack, assembling
+Empty state:  As you answer, the recommended layers stack up here. The more
+              specific your problem, the sharper the picks.
+
+
+COPY-TO-CLIPBOARD TEXT TEMPLATE (what "Copy stack" puts on your clipboard)
+-----------------------------------------------------------------------------
+STARTUP OPS STACK
+Built with Sanyukta Indani's Startup Ops Stack tool
+
+[Stage: ...  |  Team: ...  |  The real problem: ...  |  Budget: ...  |  Ways of working: ...]
+
+[headline for the chosen problem]
+
+— [LAYER NAME] —
+• [Tool] ([price])
+  [role]
+  [reason]
+  Why this: [vsObvious, if any]
+  [url]
+... (repeated per layer/tool)
+
+Pricing indicative in GBP, verified July 2026. Always check each tool's own site.
+
+
+=============================================================================
+TOOL CATALOGUE (50 tools, grouped by layer)
+Each tool shows: Name — Role | Price
+  Reason: the recommendation text (some vary by your answers — noted)
+  Why this (vsObvious): shown only if present
+  Tip: shown only if present
+=============================================================================
+
+--- FOUNDATION ---
+
+Notion: Company wiki, docs, light databases | Free tier · paid from ~£10/user
+  Reason (if team = solo): One home for everything before you have the
+    headcount to specialise. Free plan has no page limit for solo use.
+  Reason (otherwise): A single source of truth so context stops living only
+    in people's heads. Ends the same question being asked five times.
+  Why this: Over a pile of Google Docs, because databases and templates turn
+    notes into reusable systems.
+  Tip: Notion for Startups: up to 6 months of Business + AI free for eligible new non-paying startups.
+
+Google Workspace: Email, docs, drive, calendar | Free on Gmail · Business from ~£5/user
+  Reason: The boring backbone everything else plugs into. Custom domain
+    email also makes early outreach look legitimate.
+  Tip: Free on an @gmail address. Add a domain only when you start selling.
+
+Coda: Docs that behave like apps | Free tier · paid from ~£9/user
+  Reason: When your docs need buttons, logic, and live tables, Coda goes
+    further than Notion. Good for structured teams building internal tools.
+  Why this: Over Notion specifically when you want interactive docs, not
+    just pretty ones.
+
+1Password: Shared password and secrets manager | From ~£3.70/user
+  Reason: The moment two people share a login, passwords in a spreadsheet
+    become a security incident waiting to happen. Cheap insurance.
+
+
+--- COMMUNICATION ---
+
+Slack: Team messaging and integrations | Free tier is generous
+  Reason (if async style): Channels keep decisions searchable instead of
+    buried in DMs. Set it quiet, keep the record.
+  Reason (otherwise): Fast coordination without another meeting. Free tier is generous, but it starts to strain once teams grow past ~20 people.
+  Why this: Over WhatsApp for work, because search and channels mean
+    context does not vanish up the scroll.
+
+Loom: Screen recordings instead of meetings | Free tier · paid from ~£13/mo
+  Reason: A two minute recording replaces a thirty minute call for anything
+    you can show rather than discuss. Async teams live on this.
+
+Google Meet: Video calls | Free with Workspace
+  Reason: Free with Workspace and fine for most calls. No 40 minute cap to
+    work around, and nothing extra to buy early on.
+  Why this: Over Zoom early, because you are already paying for Workspace
+    and Zoom's free-tier time limit will annoy you.
+
+Discord: Community and user channels | Free
+  Reason: If your early users cluster in a community, Discord is where they
+    already are. Free, and great for building in public.
+
+
+--- GROWTH ---
+
+HubSpot free CRM: Track leads, deals, conversations | Free for 2 users · paid from ~£18/user
+  Reason: Once you have more than a handful of prospects, memory stops
+    scaling and deals go cold in the gaps. Free tier covers early stage
+    fully.
+  Why this: Over a spreadsheet, because it reminds you to follow up. A
+    sheet never nudges you.
+
+Attio: Modern, flexible CRM | Free for 3 users · paid from ~£29/user
+  Reason: A CRM you shape around how you actually sell, rather than bending
+    your process to fit. Founder favourite, and the free tier fits a small
+    team.
+  Why this: Over HubSpot when you want a data model that matches your
+    business, not a rigid contacts-and-deals template.
+
+Apollo.io: Find prospects and run outreach | Free tier · paid from ~£35/mo
+  Reason: Build targeted lists and sequence outreach without enterprise
+    sales-tool prices. Right-sized for founder-led sales.
+
+Instantly: Cold email sequences | From ~£35/mo 
+  Reason: When outbound becomes a real channel, Instantly keeps sequencing
+    simple with flat pricing that suits a lean team. Lemlist is the
+    pricier, more polished option once outbound is a dedicated function.
+  Why this: Over Lemlist for an early team, because flat pricing beats
+    per-seat when you are small and watching spend.
+
+Plausible or GA4: Website and product analytics | GA4 free · Plausible from ~£9/mo
+  Reason: You cannot improve what you cannot see. GA4 if free is the
+    priority, Plausible if you want simple and privacy-friendly.
+
+PostHog: Product analytics and session insight | Generous free tier
+  Reason: Shows what users actually do inside the product, not just how
+    many arrived. The free tier is large enough to run on for a long time.
+  Why this: Over GA4 for product depth, because GA4 tells you about
+    traffic, PostHog tells you about behaviour.
+
+Buffer: Schedule social, build in public | Free tier · paid from ~£4/channel/mo
+  Reason: Early distribution is often the founder posting consistently.
+    Scheduling removes the daily friction so it actually happens. Note it
+    is priced per channel, so costs rise with each account.
+
+
+--- DESIGN ---
+
+Figma: UI, product, and marketing design | Free tier · full seat from ~£18/mo
+  Reason (if problem = brand): The industry standard for anything visual.
+    Even non-designers can tidy up a deck or mockup here. Free tier covers
+    early needs, the full editor seat is what you pay for once designing
+    properly.
+  Reason (otherwise): One place for product mockups, quick graphics, and
+    shared design files. Free tier is enough until you have a dedicated
+    designer.
+
+Canva: Fast graphics without a designer | Free tier · Pro from ~£13/mo
+  Reason: Social posts, one-pagers, and decks that look professional in
+    minutes. This is what keeps a founder-run brand from looking homemade.
+  Why this: Over Figma for quick marketing assets, because templates get
+    you to done faster when you are not a designer.
+  Tip: Canva for Startups gives eligible early teams Pro features free.
+
+Framer or Webflow: Marketing site without a developer | Free tier · paid from ~£10/mo
+  Reason: A credible landing page you can edit yourself, no engineer
+    needed. Framer is faster to learn, Webflow gives more control.
+  Why this: Over a custom-coded site early, because your time is better
+    spent talking to users than maintaining a codebase.
+
+Pitch: Collaborative pitch and sales decks | Free tier · paid from ~£16/mo
+  Reason: Founders live in decks: investor, sales, hiring. Pitch makes them
+    look designed without the PowerPoint fight, and the team can work in
+    one live at once.
+  Why this: Over PowerPoint or raw Google Slides, because the templates and
+    live collaboration save real hours on the decks you rebuild constantly.
+
+Brandmark or Looka: Starter logo and brand basics | One-off from ~£14
+  Reason: A clean starter identity for near nothing, so you look
+    intentional before you can afford a designer. Replace it later when
+    brand matters more.
+
+Unsplash + Coolors: Free imagery and colour palettes | Free
+  Reason: Good free photography and a palette generator cover most early
+    visual needs. Small touches that make a scrappy brand feel deliberate.
+
+
+--- PRODUCT ---
+
+Linear: Issue tracking and product planning | Free tier · paid from ~£8/user
+  Reason (if problem = building): Direction comes from a clear, reorderable
+    queue, not more meetings. Fast enough that engineers actually keep it
+    current.
+  Reason (otherwise): Keeps the roadmap visible so priorities stop
+    drifting. Light enough not to slow a small team.
+  Why this: Over Jira at this stage, because Jira's power is overhead you
+    do not need until you are much bigger.
+
+GitHub: Code hosting and version control | Free for small teams
+  Reason: Where your code lives, reviews happen, and history is safe.
+    Non-negotiable the moment more than one person writes code.
+
+Vercel or Netlify: Deploy the product and sites | Free tier · paid from ~£14/mo
+  Reason: Push code and it is live, with previews for every change.
+    Removes a whole category of deployment headache for small teams.
+
+Tagged feedback database: Capture and theme user feedback | Free in Notion · Dovetail paid.
+  Reason (if budget = zero): A tagged Notion database does most of this for
+    free. Structure feedback so patterns surface before you spend on a
+    dedicated tool.
+  Reason (otherwise): Turns scattered comments into themes you can act on.
+    Feedback you cannot search is feedback you quietly ignore.
+
+Canny: Public feedback and roadmap board | Free tier · paid from ~£70/mo
+  Reason: Lets users post and vote on requests in the open, so you
+    prioritise with evidence instead of guesses and gut feel.
+
+Cal.com or Calendly: Book user interviews easily | Free tier works
+  Reason: Talking to users is the highest-leverage early activity. Remove
+    every gram of scheduling friction so more conversations happen.
+
+
+--- OPERATIONS ---
+
+Zapier or Make: Automate handoffs between tools | Free tier · paid from ~£7/mo (Make) or ~£25/mo (Zapier)
+  Reason: Every manual copy-paste between two tools is a task that will
+    eventually be forgotten. Automate the handoffs first, the clever stuff
+    never.
+  Why this: Make is cheaper and more flexible for complex flows. Zapier is
+    simpler if you just want it working today.
+
+Templated processes with owners: Repeatable workflows, one name per step | Free in Notion
+  Reason: Things fall through cracks because steps have no owner, not
+    because you lack a tool. A name against each step fixes most of it.
+
+Tally: Forms, surveys, and intake | Free (generous) · Pro from ~£20/mo
+  Reason (if budget = zero): Beautiful forms with a genuinely generous free
+    tier, edited like a Notion doc. The zero-budget answer for lead
+    capture, surveys, and applications.
+  Reason (otherwise): Fast, clean forms for lead capture, surveys, and
+    applications, feeding straight into the rest of your stack.
+  Why this: Over Typeform when budget is tight, because Tally's free tier
+    is far more generous for the same job.
+
+AI assistant workflow: Draft, summarise, clear repetitive admin | Free to start
+  Reason: Most founder busywork is drafting, summarising, and reformatting.
+    A few saved AI prompts for the repeat jobs claw back hours a week for
+    near nothing.
+
+Airtable: Relational database for ops | Free tier · paid from ~£14/user
+  Reason: When Notion databases start creaking under real operational
+    volume, Airtable's relational structure and automations hold up
+    better.
+  Why this: Over a Notion database when the data is genuinely operational:
+    inventory, pipelines, anything with thousands of rows.
+
+Miro or FigJam: Workshops and strategy mapping | Free tier · paid from ~£5/user
+  Reason: When you need to map a process, run a planning session, or think
+    visually as a team, a shared canvas beats a doc. FigJam is free if you
+    are already in Figma.
+  Why this: FigJam over Miro if you already use Figma, since it is
+    included. Miro if you want the deeper workshop features.
+
+Simple OKR or goals doc: Keep everyone pointed the same way | Free
+  Reason: As the team grows, a one-page set of quarterly goals with owners
+    stops good people rowing in different directions. Start as a doc, not
+    software.
+
+
+--- CUSTOMER SUPPORT ---
+
+Front: Shared inbox for support@ and hello@ | Free trial · paid from ~£25/seat
+  Reason: Early support is a shared email address descending into chaos:
+    replies missed, two people answering the same thing. A shared inbox
+    gives every message an owner without a heavy help desk.
+  Why this: Over forwarding support@ to a personal inbox, because that
+    quietly drops customers and nobody knows who replied.
+
+Plain: Lightweight, fast customer support | No free tier · paid from ~£25/seat
+  Reason: Support tooling that feels like Linear: fast, clean, and built for product-led teams rather than call centres. A good first support tool for a technical early team.
+  Why this: Over Intercom or Zendesk early, because it is lighter to run and better aligned with B2B SaaS workflows.
+
+
+--- FINANCE ---
+
+Runway model in Sheets: Cash, runway, scenario planning | Free
+  Reason: Before any finance software, a clean sheet showing runway in
+    months is what you and investors both need. Start here.
+  Why this: Over finance software on day one, because a founder who knows
+    their runway cold beats one with a pretty dashboard.
+
+Xero: Bookkeeping and invoicing | From ~£7/mo (Simple) or ~£16/mo (Ignite)
+  Reason: Clean books now save a painful cleanup at your first raise or
+    year end. Non-negotiable once real money is moving. Stronger in the UK
+    than QuickBooks, which is the main alternative.
+  Why this: Over QuickBooks for a UK company, because Xero's interface and
+    local fit are cleaner. QuickBooks is the alternative if you prefer it.
+
+Stripe: Take payments online | ~1.5% + 20p per UK card
+  Reason: The default way to charge customers, with the developer support
+    to match. If you are collecting revenue, this is the safe starting
+    point.
+
+Pleo: Company cards and spend control | Free trial · Starter from ~£9.50/mo · Essential £45/mo
+  Reason: Once more than one person spends money, per-person cards with
+    built-in limits and receipt capture beat chasing expense claims. Pleo
+    is UK and EU native. Ramp is the US alternative.
+  Why this: Over Ramp or Brex for a UK team, because Pleo is built for UK
+    and EU, while Ramp and Brex are US-first.
+
+Cap table in Sheets or Carta: Track equity and ownership | Free (Sheets) · Carta paid
+  Reason: Know exactly who owns what before you raise. A clean sheet is
+    fine early, move to Carta when the cap table gets complex.
+
+AI investor research workflow: Source, qualify, and track investors | Free to build
+  Reason: Fundraising prep is mostly structured research: who fits, how to
+    reach them, what to say. An automated sourcing and qualification
+    workflow cuts the manual effort sharply and keeps outreach organised.
+  Tip: This is the layer I built hands-on: automated investor sourcing,
+    qualification, structured lead tracking, and tailored outreach to
+    improve fundraising readiness.
+
+
+--- PEOPLE ---
+
+Simple candidate pipeline: Track applicants by stage and owner | Free in Notion · Ashby when funded
+  Reason (if team = solo OR budget = zero): A pipeline board beats a
+    spreadsheet and costs nothing. Every candidate has a stage and an
+    owner, so nobody goes cold.
+  Reason (otherwise): Hiring falls apart in the handoffs. A real pipeline
+    keeps candidates warm and the process consistent.
+  Why this: Over an inbox and a spreadsheet, because a pipeline shows at a
+    glance who is stuck and where.
+
+Ashby: Applicant tracking for serious hiring | Paid, for funded teams
+  Reason: When hiring becomes a constant, a proper ATS with analytics beats
+    a manual board. Worth it once you are hiring several roles at once.
+
+Tally or Typeform: Application and intake forms | Tally free · Typeform from ~£30/mo
+  Reason: A clean application form that people actually finish, feeding
+    straight into your pipeline. Tally covers it free, Typeform is the
+    paid option if you want its polish.
+
+Deel: Payroll and contractor management | Contractors from ~£35 each/mo; EOR from ~£445/employee/mo
+  Reason: Paying people correctly and on time is not where you want to
+    improvise. Deel is strong for UK and international contractors, and
+    has grown into a fuller HR platform with a Core HRIS from ~£4/employee
+    and hiring tools layered on, so it scales as your team does. Gusto is
+    the US-focused alternative.
+  Why this: Over Gusto for a UK or international team, because Gusto is
+    US-focused while Deel handles cross-border hiring cleanly.
+
+Onboarding checklist template: Repeatable, productive first week | Free
+  Reason: The cheapest retention tool there is. A new hire useful in week
+    one stays. Write it once, reuse it every time.
+
+=============================================================================
+END OF FILE
+=============================================================================
