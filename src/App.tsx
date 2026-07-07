@@ -561,7 +561,7 @@ export default function App() {
       background: `radial-gradient(1100px 600px at 12% -10%, rgba(253,54,110,0.20), transparent 60%), radial-gradient(900px 520px at 92% 4%, rgba(91,157,255,0.14), transparent 55%), ${C.ink}`,
       color: C.onInk,
       fontFamily: "'Inter', system-ui, sans-serif", display: "flex",
-      justifyContent: "center", alignItems: "center", padding: "clamp(16px, 4vw, 48px)", boxSizing: "border-box",
+      justifyContent: "center", padding: "clamp(16px, 4vw, 48px)", boxSizing: "border-box",
     }}>
       <style>{`
         * { box-sizing: border-box; }
@@ -594,7 +594,10 @@ export default function App() {
         }
       `}</style>
 
-      <div style={{ width: "100%", maxWidth: 1120 }}>
+      <div style={{
+        width: "100%", maxWidth: 1120, display: "flex", flexDirection: "column",
+        minHeight: "calc(100vh - clamp(32px, 8vw, 96px))",
+      }}>
         <div style={{
           display: "flex", alignItems: "baseline", justifyContent: "space-between",
           gap: 16, flexWrap: "wrap", marginBottom: "clamp(20px, 4vw, 40px)",
@@ -634,7 +637,7 @@ export default function App() {
             {step === -1 && (
               <div className="rise">
                 <h1 style={{
-                  fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(30px, 5vw, 52px)",
+                  fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(38px, 6.5vw, 68px)",
                   lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 20px", fontWeight: 700,
                 }}>Five questions.<br />One tailored software stack.</h1>
                 <p style={{
@@ -900,6 +903,16 @@ export default function App() {
             </div>
           )}
         </div>
+
+        {step === -1 && (
+          <div className="no-print" style={{
+            marginTop: "auto", paddingTop: 24, borderTop: `1px solid ${C.inkSoft}`,
+            color: C.onInkMuted, fontSize: 12.5, lineHeight: 1.6, maxWidth: 640,
+          }}>
+            Shaped by working alongside founders at two early stage startups, where the
+            right lightweight system usually beat the expensive one nobody kept up.
+          </div>
+        )}
       </div>
     </div>
   );
