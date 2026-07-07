@@ -561,7 +561,7 @@ export default function App() {
       background: `radial-gradient(1100px 600px at 12% -10%, rgba(253,54,110,0.20), transparent 60%), radial-gradient(900px 520px at 92% 4%, rgba(91,157,255,0.14), transparent 55%), ${C.ink}`,
       color: C.onInk,
       fontFamily: "'Inter', system-ui, sans-serif", display: "flex",
-      justifyContent: "center", padding: "clamp(16px, 4vw, 48px)", boxSizing: "border-box",
+      justifyContent: "center", alignItems: "center", padding: "clamp(16px, 4vw, 48px)", boxSizing: "border-box",
     }}>
       <style>{`
         * { box-sizing: border-box; }
