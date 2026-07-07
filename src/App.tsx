@@ -850,10 +850,6 @@ export default function App() {
                           background: "rgba(255,255,255,0.03)", border: `1px solid ${C.inkSoft}`,
                           borderRadius: 12, padding: "12px 14px",
                         }}>
-                          <span style={{
-                            width: 22, height: 22, borderRadius: 7, flexShrink: 0,
-                            background: layerColor(item.layer),
-                          }} />
                           <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14 }}>
                             {item.label}
                           </span>
