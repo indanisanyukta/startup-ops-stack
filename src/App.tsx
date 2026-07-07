@@ -628,6 +628,7 @@ export default function App() {
           </div>
         )}
 
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <div style={{
           display: "grid",
           gridTemplateColumns: done ? "1fr" : "minmax(0, 1.15fr) minmax(0, 0.85fr)",
@@ -903,10 +904,11 @@ export default function App() {
             </div>
           )}
         </div>
+        </div>
 
         {step === -1 && (
           <div className="no-print" style={{
-            marginTop: "auto", paddingTop: 24, borderTop: `1px solid ${C.inkSoft}`,
+            marginTop: 32, paddingTop: 24, borderTop: `1px solid ${C.inkSoft}`,
             color: C.onInkMuted, fontSize: 12.5, lineHeight: 1.6, maxWidth: 640,
           }}>
             Shaped by working alongside founders at two early stage startups, where the
