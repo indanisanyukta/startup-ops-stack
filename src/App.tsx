@@ -640,7 +640,7 @@ export default function App() {
                 <h1 style={{
                   fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(38px, 6.5vw, 68px)",
                   lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 20px", fontWeight: 700,
-                }}>Five questions.<br />One tailored software stack.</h1>
+                }}>Five questions.<br />One tailored software <span style={{ color: C.amber }}>stack</span>.</h1>
                 <p style={{
                   color: C.onInkMuted, fontSize: "clamp(15px, 2vw, 18px)", lineHeight: 1.6,
                   maxWidth: 560, margin: "0 0 28px",
