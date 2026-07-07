@@ -486,6 +486,14 @@ function buildPlainText(answers, stack) {
 
 const STEP_KEYS = QUESTIONS.map((q) => q.id);
 
+const STACK_PREVIEW = [
+  { label: "Foundation", tag: "wiki", layer: "Foundation" },
+  { label: "Growth", tag: "gtm", layer: "Growth" },
+  { label: "Product", tag: "roadmap", layer: "Product" },
+  { label: "Operations", tag: "automate", layer: "Operations" },
+  { label: "Finance", tag: "runway", layer: "Finance" },
+];
+
 export default function App() {
   const [step, setStep] = useState(-1);
   const [answers, setAnswers] = useState({});
@@ -561,9 +569,19 @@ export default function App() {
         a.os-link:focus-visible { outline: 2px solid ${C.amber}; outline-offset: 2px; }
         @keyframes riseIn { from { opacity: 0; transform: translateY(10px);} to {opacity:1; transform:none;} }
         @keyframes layerSlide { from { opacity: 0; transform: translateX(-8px);} to {opacity:1; transform:none;} }
+        @keyframes stackRowCycle {
+          0% { opacity: 0; transform: translateX(28px); }
+          10% { opacity: 1; transform: translateX(0); }
+          75% { opacity: 1; transform: translateX(0); }
+          90% { opacity: 0; transform: translateX(-10px); }
+          100% { opacity: 0; transform: translateX(-10px); }
+        }
+        @keyframes growLine { 0% { transform: scaleY(0); } 30% { transform: scaleY(1); } 100% { transform: scaleY(1); } }
         .rise { animation: riseIn .45s cubic-bezier(.2,.7,.2,1) both; }
         .layer-in { animation: layerSlide .4s cubic-bezier(.2,.7,.2,1) both; }
-        @media (prefers-reduced-motion: reduce){ .rise,.layer-in{animation:none;} }
+        .stack-preview-row { animation: stackRowCycle 5s ease-in-out infinite; }
+        .stack-preview-line { animation: growLine 5s ease-in-out infinite; transform-origin: top; }
+        @media (prefers-reduced-motion: reduce){ .rise,.layer-in,.stack-preview-row,.stack-preview-line{animation:none;} }
         .opt:hover { border-color: ${C.amber} !important; transform: translateY(-2px); background: rgba(253,54,110,0.06) !important; }
         .opt { transition: transform .15s ease, border-color .15s ease, background .15s ease; }
         .tool-link { color: ${C.muted}; text-decoration: none; border-bottom: 1px dotted ${C.muted}; }
@@ -587,7 +605,7 @@ export default function App() {
               fontSize: "clamp(20px, 3vw, 26px)", letterSpacing: "-0.02em",
             }}>Startup Ops Stack</div>
             <div style={{ color: C.onInkMuted, fontSize: 13, marginTop: 4 }}>
-              For early stage founders. Five questions, then a lean stack built around your real problem and your budget.
+              For early-stage founders
             </div>
           </div>
           <div style={{
@@ -618,14 +636,12 @@ export default function App() {
                 <h1 style={{
                   fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(30px, 5vw, 52px)",
                   lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 20px", fontWeight: 700,
-                }}>Build the stack for where you are,<br />not where you might be.</h1>
+                }}>Five questions.<br />One tailored software stack.</h1>
                 <p style={{
                   color: C.onInkMuted, fontSize: "clamp(15px, 2vw, 18px)", lineHeight: 1.6,
                   maxWidth: 560, margin: "0 0 28px",
                 }}>
-                  Tell it your stage, your team, and the one thing actually slowing you down.
-                  It recommends a lean stack built around that problem, sized to your budget,
-                  with the reasoning for every pick and where the free option is good enough.
+                  Built around your stage, your biggest bottleneck, and your budget.
                 </p>
                 <button className="os-btn os-btn-primary" onClick={() => setStep(0)} style={{
                   background: `linear-gradient(135deg, ${C.amber}, #FF6B9D)`, color: "#fff", border: "none", borderRadius: 999,
@@ -634,8 +650,7 @@ export default function App() {
                   boxShadow: "0 8px 24px rgba(253,54,110,0.35)",
                 }}>Build my stack →</button>
                 <p style={{ color: C.onInkMuted, fontSize: 12.5, marginTop: 24, maxWidth: 520, lineHeight: 1.5 }}>
-                  Shaped by working alongside founders at two early stage startups, where the
-                  right lightweight system usually beat the expensive one nobody kept up.
+                  Every recommendation includes why it fits and when the free version is enough.
                 </p>
               </div>
             )}
@@ -812,37 +827,76 @@ export default function App() {
               position: "sticky", top: 24, background: "rgba(255,255,255,0.02)", borderRadius: 20,
               padding: 20, border: `1px solid ${C.inkSoft}`, minHeight: 320,
             }}>
-              <div style={{
-                fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
-                color: C.onInkMuted, marginBottom: 16,
-              }}>Your stack, assembling</div>
-              {answeredLayers.length === 0 && (
-                <div style={{
-                  color: C.onInkMuted, fontSize: 13.5, lineHeight: 1.6, padding: "40px 4px", textAlign: "center",
-                }}>
-                  As you answer, the recommended layers stack up here. The more specific your problem, the sharper the picks.
-                </div>
-              )}
-              <div style={{ display: "grid", gap: 8 }}>
-                {answeredLayers.map((group, i) => (
-                  <div key={group.layer} className="layer-in" style={{
-                    animationDelay: reduced ? "0s" : `${i * 0.05}s`, background: "rgba(255,255,255,0.03)",
-                    borderRadius: 10, padding: "12px 14px", borderLeft: `3px solid ${layerColor(group.layer)}`,
-                  }}>
-                    <div style={{
-                      fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13.5, marginBottom: 6,
-                    }}>{group.layer}</div>
-                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                      {group.tools.map((t) => (
-                        <span key={t.name} style={{
-                          fontSize: 12, color: C.onInkMuted, background: "rgba(255,255,255,0.04)",
-                          borderRadius: 6, padding: "3px 8px",
-                        }}>{t.name}</span>
+              {step === -1 ? (
+                <>
+                  <div style={{
+                    fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
+                    color: C.onInkMuted, marginBottom: 20,
+                  }}>Building your stack</div>
+                  <div style={{ position: "relative", paddingLeft: 18 }}>
+                    <span className="stack-preview-line" style={{
+                      position: "absolute", left: 0, top: 4, bottom: 4, width: 2,
+                      background: `linear-gradient(${C.amber}, transparent)`,
+                    }} />
+                    <div style={{ display: "grid", gap: 12 }}>
+                      {STACK_PREVIEW.map((item, i) => (
+                        <div key={item.label} className="stack-preview-row" style={{
+                          animationDelay: reduced ? "0s" : `${i * 0.5}s`,
+                          display: "flex", alignItems: "center", gap: 10,
+                          background: "rgba(255,255,255,0.03)", border: `1px solid ${C.inkSoft}`,
+                          borderRadius: 12, padding: "12px 14px",
+                        }}>
+                          <span style={{
+                            width: 22, height: 22, borderRadius: 7, flexShrink: 0,
+                            background: layerColor(item.layer),
+                          }} />
+                          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14 }}>
+                            {item.label}
+                          </span>
+                          <span style={{
+                            marginLeft: "auto", fontFamily: "ui-monospace, monospace",
+                            fontSize: 11.5, color: C.onInkMuted,
+                          }}>{item.tag}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
-                ))}
-              </div>
+                </>
+              ) : (
+                <>
+                  <div style={{
+                    fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
+                    color: C.onInkMuted, marginBottom: 16,
+                  }}>Your stack, assembling</div>
+                  {answeredLayers.length === 0 && (
+                    <div style={{
+                      color: C.onInkMuted, fontSize: 13.5, lineHeight: 1.6, padding: "40px 4px", textAlign: "center",
+                    }}>
+                      As you answer, the recommended layers stack up here. The more specific your problem, the sharper the picks.
+                    </div>
+                  )}
+                  <div style={{ display: "grid", gap: 8 }}>
+                    {answeredLayers.map((group, i) => (
+                      <div key={group.layer} className="layer-in" style={{
+                        animationDelay: reduced ? "0s" : `${i * 0.05}s`, background: "rgba(255,255,255,0.03)",
+                        borderRadius: 10, padding: "12px 14px", borderLeft: `3px solid ${layerColor(group.layer)}`,
+                      }}>
+                        <div style={{
+                          fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13.5, marginBottom: 6,
+                        }}>{group.layer}</div>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                          {group.tools.map((t) => (
+                            <span key={t.name} style={{
+                              fontSize: 12, color: C.onInkMuted, background: "rgba(255,255,255,0.04)",
+                              borderRadius: 6, padding: "3px 8px",
+                            }}>{t.name}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
