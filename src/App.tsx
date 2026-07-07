@@ -98,6 +98,7 @@ const CATALOGUE = [
     price: "Free on Gmail · Business from ~£5/user", url: "https://workspace.google.com/pricing",
     when: () => true,
     reason: () => "The boring backbone everything else plugs into. Custom domain email also makes early outreach look legitimate.",
+    vsObvious: "Microsoft 365 with Outlook is the alternative if your team already lives in the Microsoft ecosystem, otherwise Google Workspace is the lighter early default.",
     tip: "Free on an @gmail address. Add a domain only when you start selling.",
   },
   {
@@ -122,7 +123,7 @@ const CATALOGUE = [
     reason: (a) => a.style === "async"
       ? "Channels keep decisions searchable instead of buried in DMs. Set it quiet, keep the record."
       : "Fast coordination without another meeting. Free tier is generous, but it starts to strain once teams grow past ~20 people.",
-    vsObvious: "Over WhatsApp for work, because search and channels mean context does not vanish up the scroll.",
+    vsObvious: "Over WhatsApp for work, because search and channels mean context does not vanish up the scroll. Microsoft Teams is the alternative if you are already in the Microsoft ecosystem.",
   },
   {
     layer: "Communication", name: "Loom", role: "Screen recordings instead of meetings",
