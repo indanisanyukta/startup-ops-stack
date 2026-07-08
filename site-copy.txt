@@ -13,13 +13,13 @@ Badge:      by Sanyukta Indani
 
 HERO (intro screen, before first question)
 -----------------------------------------------------------------------------
-Headline:   Build the stack for where you are,
-            not where you might be.
+Headline:   Five questions.
+            One tailored software stack.   ["stack" shown in pink]
 
-Body:       Tell it your stage, your team, and the one thing actually slowing
-            you down. It recommends a lean stack built around that problem,
-            sized to your budget, with the reasoning for every pick and where
-            the free option is good enough.
+Body:       Built around your stage, your biggest bottleneck, and your budget.
+
+CTA note:   Every recommendation includes why it fits and when the free
+            version is enough.
 
 Button:     Build my stack →
 
@@ -178,6 +178,9 @@ Notion: Company wiki, docs, light databases | Free tier · paid from ~£10/user
 Google Workspace: Email, docs, drive, calendar | Free on Gmail · Business from ~£5/user
   Reason: The boring backbone everything else plugs into. Custom domain
     email also makes early outreach look legitimate.
+  Why this: Microsoft 365 with Outlook is the alternative if your team
+    already lives in the Microsoft ecosystem, otherwise Google Workspace
+    is the lighter early default.
   Tip: Free on an @gmail address. Add a domain only when you start selling.
 
 Coda: Docs that behave like apps | Free tier · paid from ~£9/user
@@ -196,9 +199,10 @@ Coda: Docs that behave like apps | Free tier · paid from ~£9/user
 Slack: Team messaging and integrations | Free tier is generous
   Reason (if async style): Channels keep decisions searchable instead of
     buried in DMs. Set it quiet, keep the record.
-  Reason (otherwise): Fast coordination without another meeting. Free tier is generous, but it starts to strain once teams grow past ~20 people.
+  Reason (otherwise): Fast coordination without another meeting. Free tier works early, but note it only keeps 90 days of message history and strains past ~20 people.
   Why this: Over WhatsApp for work, because search and channels mean
-    context does not vanish up the scroll.
+    context does not vanish up the scroll. Microsoft Teams is the
+    alternative if you are already in the Microsoft ecosystem.
 
 Loom: Screen recordings instead of meetings | Free tier · paid from ~£13/mo
   Reason: A two minute recording replaces a thirty minute call for anything
@@ -217,14 +221,14 @@ Discord: Community and user channels | Free
 
 --- GROWTH ---
 
-HubSpot free CRM: Track leads, deals, conversations | Free for 2 users · paid from ~£18/user
+HubSpot free CRM: Track leads, deals, conversations | Free for 2 users · paid from ~£15/user
   Reason: Once you have more than a handful of prospects, memory stops
-    scaling and deals go cold in the gaps. Free tier covers early stage
-    fully.
+    scaling and deals go cold in the gaps. Free tier covers 2 seats and
+    1,000 contacts, which is plenty to start.
   Why this: Over a spreadsheet, because it reminds you to follow up. A
     sheet never nudges you.
 
-Attio: Modern, flexible CRM | Free for 3 users · paid from ~£29/user
+Attio: Modern, flexible CRM | Free for 3 users · paid from ~£23/user
   Reason: A CRM you shape around how you actually sell, rather than bending
     your process to fit. Founder favourite, and the free tier fits a small
     team.
@@ -260,7 +264,7 @@ Buffer: Schedule social, build in public | Free tier · paid from ~£4/channel/m
 
 --- DESIGN ---
 
-Figma: UI, product, and marketing design | Free tier · full seat from ~£18/mo
+Figma: UI, product, and marketing design | Free tier · full seat from ~£13/mo
   Reason (if problem = brand): The industry standard for anything visual.
     Even non-designers can tidy up a deck or mockup here. Free tier covers
     early needs, the full editor seat is what you pay for once designing
@@ -325,7 +329,7 @@ Tagged feedback database: Capture and theme user feedback | Free in Notion · Do
   Reason (otherwise): Turns scattered comments into themes you can act on.
     Feedback you cannot search is feedback you quietly ignore.
 
-Canny: Public feedback and roadmap board | Free tier · paid from ~£70/mo
+Canny: Public feedback and roadmap board | Free tier · paid from ~£40/mo (annual)
   Reason: Lets users post and vote on requests in the open, so you
     prioritise with evidence instead of guesses and gut feel.
 
@@ -383,14 +387,14 @@ Simple OKR or goals doc: Keep everyone pointed the same way | Free
 
 --- CUSTOMER SUPPORT ---
 
-Front: Shared inbox for support@ and hello@ | Free trial · paid from ~£25/seat
+Front: Shared inbox for support@ and hello@ | Free trial · paid from ~£20/seat
   Reason: Early support is a shared email address descending into chaos:
     replies missed, two people answering the same thing. A shared inbox
     gives every message an owner without a heavy help desk.
   Why this: Over forwarding support@ to a personal inbox, because that
     quietly drops customers and nobody knows who replied.
 
-Plain: Lightweight, fast customer support | No free tier · paid from ~£25/seat
+Plain: Lightweight, fast customer support | No free tier · paid from ~£28/seat
   Reason: Support tooling that feels like Linear: fast, clean, and built for product-led teams rather than call centres. A good first support tool for a technical early team.
   Why this: Over Intercom or Zendesk early, because it is lighter to run and better aligned with B2B SaaS workflows.
 

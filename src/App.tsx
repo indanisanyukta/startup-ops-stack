@@ -1,13 +1,13 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 // ---------------------------------------------------------------------------
 // Startup Ops Stack — recommends an operations stack for early stage startups,
-// tuned to the founder's real problem and budget. 50 tools across 9 layers.
+// tuned to the founder's real problem and budget. 47 tools across 9 layers.
 // Shaped by working alongside founders at two early stage startups.
 // Pricing verified July 2026, shown in GBP as approximate tiers.
 // ---------------------------------------------------------------------------
 
-const FONT_LINK_ID = "ops-stack-fonts";
+const FONT_LINK_ID = "ops-stack-fonts-v3";
 const PRICING_VERIFIED = "July 2026"; // update when you re-check the pricing pages
 
 const QUESTIONS = [
@@ -75,8 +75,13 @@ const QUESTIONS = [
   },
 ];
 
+const LAYER_ORDER = [
+  "Foundation", "Communication", "Growth", "Design",
+  "Product", "Operations", "Customer Support", "Finance", "People",
+];
+
 // ---------------------------------------------------------------------------
-// Catalogue: 50 tools across 9 layers. Prices are approximate GBP tiers,
+// Catalogue: 47 tools across 9 layers. Prices are approximate GBP tiers,
 // verified July 2026. Where a pairing was just hedging, the tool commits to one
 // default and notes the alternative in the reasoning. Genuine "pick this when"
 // pairs (Framer/Webflow, Zapier/Make, Plausible/GA4) stay as pairs.
@@ -122,7 +127,7 @@ const CATALOGUE = [
     when: (t, a) => a.team !== "solo",
     reason: (a) => a.style === "async"
       ? "Channels keep decisions searchable instead of buried in DMs. Set it quiet, keep the record."
-      : "Fast coordination without another meeting. Free tier is generous, but it starts to strain once teams grow past ~20 people.",
+      : "Fast coordination without another meeting. Free tier works early, but note it only keeps 90 days of message history and strains past ~20 people.",
     vsObvious: "Over WhatsApp for work, because search and channels mean context does not vanish up the scroll. Microsoft Teams is the alternative if you are already in the Microsoft ecosystem.",
   },
   {
@@ -148,14 +153,14 @@ const CATALOGUE = [
   // ===================== GROWTH / GTM =====================
   {
     layer: "Growth", name: "HubSpot free CRM", role: "Track leads, deals, conversations",
-    price: "Free for 2 users · paid from ~£18/user", url: "https://www.hubspot.com/pricing/crm",
+    price: "Free for 2 users · paid from ~£15/user", url: "https://www.hubspot.com/pricing/crm",
     when: (t) => t.has("gtm"),
-    reason: () => "Once you have more than a handful of prospects, memory stops scaling and deals go cold in the gaps. Free tier covers early stage fully.",
+    reason: () => "Once you have more than a handful of prospects, memory stops scaling and deals go cold in the gaps. Free tier covers 2 seats and 1,000 contacts, which is plenty to start.",
     vsObvious: "Over a spreadsheet, because it reminds you to follow up. A sheet never nudges you.",
   },
   {
     layer: "Growth", name: "Attio", role: "Modern, flexible CRM",
-    price: "Free for 3 users · paid from ~£29/user", url: "https://attio.com/pricing",
+    price: "Free for 3 users · paid from ~£23/user", url: "https://attio.com/pricing",
     when: (t, a) => t.has("gtm") && (t.has("funded") || t.has("lean-budget")),
     reason: () => "A CRM you shape around how you actually sell, rather than bending your process to fit. Founder favourite, and the free tier fits a small team.",
     vsObvious: "Over HubSpot when you want a data model that matches your business, not a rigid contacts-and-deals template.",
@@ -196,7 +201,7 @@ const CATALOGUE = [
   // ===================== DESIGN =====================
   {
     layer: "Design", name: "Figma", role: "UI, product, and marketing design",
-    price: "Free tier · full seat from ~£18/mo", url: "https://www.figma.com/pricing",
+    price: "Free tier · full seat from ~£13/mo", url: "https://www.figma.com/pricing",
     when: () => true,
     reason: (a) => a.problem === "brand"
       ? "The industry standard for anything visual. Even non-designers can tidy up a deck or mockup here. Free tier covers early needs, the full editor seat is what you pay for once designing properly."
@@ -220,7 +225,7 @@ const CATALOGUE = [
   {
     layer: "Design", name: "Pitch", role: "Collaborative pitch and sales decks",
     price: "Free tier · paid from ~£16/mo", url: "https://pitch.com/pricing",
-    when: (t, a) => t.has("design") || t.has("gtm") || t.has("finance"),
+    when: (t) => t.has("design") || t.has("gtm") || t.has("finance"),
     reason: () => "Founders live in decks: investor, sales, hiring. Pitch makes them look designed without the PowerPoint fight, and the team can work in one live at once.",
     vsObvious: "Over PowerPoint or raw Google Slides, because the templates and live collaboration save real hours on the decks you rebuild constantly.",
   },
@@ -233,7 +238,7 @@ const CATALOGUE = [
   {
     layer: "Design", name: "Unsplash + Coolors", role: "Free imagery and colour palettes",
     price: "Free", url: "https://coolors.co",
-    when: (t, a) => t.has("design") || t.has("gtm"),
+    when: (t) => t.has("design") || t.has("gtm"),
     reason: () => "Good free photography and a palette generator cover most early visual needs. Small touches that make a scrappy brand feel deliberate.",
   },
 
@@ -269,7 +274,7 @@ const CATALOGUE = [
   },
   {
     layer: "Product", name: "Canny", role: "Public feedback and roadmap board",
-    price: "Free tier · paid from ~£70/mo", url: "https://canny.io/pricing",
+    price: "Free tier · paid from ~£40/mo (annual)", url: "https://canny.io/pricing",
     when: (t, a) => t.has("product") && a.stage === "launched",
     reason: () => "Lets users post and vote on requests in the open, so you prioritise with evidence instead of guesses and gut feel.",
   },
@@ -297,7 +302,7 @@ const CATALOGUE = [
   {
     layer: "Operations", name: "Tally", role: "Forms, surveys, and intake",
     price: "Free (generous) · Pro from ~£20/mo", url: "https://tally.so/pricing",
-    when: (t, a) => t.has("ops") || t.has("busywork") || t.has("gtm") || t.has("people"),
+    when: (t) => t.has("ops") || t.has("busywork") || t.has("gtm") || t.has("people"),
     reason: (a) => a.budget === "zero"
       ? "Beautiful forms with a genuinely generous free tier, edited like a Notion doc. The zero-budget answer for lead capture, surveys, and applications."
       : "Fast, clean forms for lead capture, surveys, and applications, feeding straight into the rest of your stack.",
@@ -318,7 +323,7 @@ const CATALOGUE = [
   },
   {
     layer: "Operations", name: "Miro or FigJam", role: "Workshops and strategy mapping",
-    price: "Free tier · paid from ~£5/user", url: "https://miro.com/pricing",
+    price: "Free tier · paid from ~£6/user", url: "https://miro.com/pricing",
     when: (t, a) => (t.has("structured-need") || t.has("structured")) && a.team !== "solo",
     reason: () => "When you need to map a process, run a planning session, or think visually as a team, a shared canvas beats a doc. FigJam is free if you are already in Figma.",
     vsObvious: "FigJam over Miro if you already use Figma, since it is included. Miro if you want the deeper workshop features.",
@@ -333,14 +338,14 @@ const CATALOGUE = [
   // ===================== CUSTOMER SUPPORT =====================
   {
     layer: "Customer Support", name: "Front", role: "Shared inbox for support@ and hello@",
-    price: "Free trial · paid from ~£25/seat", url: "https://front.com/pricing",
+    price: "Free trial · paid from ~£20/seat", url: "https://front.com/pricing",
     when: (t, a) => t.has("support") || (t.has("gtm") && a.stage === "launched"),
     reason: () => "Early support is a shared email address descending into chaos: replies missed, two people answering the same thing. A shared inbox gives every message an owner without a heavy help desk.",
     vsObvious: "Over forwarding support@ to a personal inbox, because that quietly drops customers and nobody knows who replied.",
   },
   {
     layer: "Customer Support", name: "Plain", role: "Lightweight, fast customer support",
-    price: "No free tier · paid from ~£25/seat", url: "https://www.plain.com/pricing",
+    price: "No free tier · paid from ~£28/seat", url: "https://www.plain.com/pricing",
     when: (t, a) => t.has("support") && (t.has("product") || a.stage === "launched" || a.stage === "scaling"),
     reason: () => "Support tooling that feels like Linear: fast, clean, and built for product-led teams rather than call centres. A good first support tool for a technical early team.",
     vsObvious: "Over Intercom or Zendesk early, because it is lighter to run and better aligned with B2B SaaS workflows.",
@@ -401,7 +406,7 @@ const CATALOGUE = [
   {
     layer: "People", name: "Ashby", role: "Applicant tracking for serious hiring",
     price: "Paid, for funded teams", url: "https://www.ashbyhq.com/pricing",
-    when: (t, a) => t.has("people") && t.has("funded"),
+    when: (t) => t.has("people") && t.has("funded"),
     reason: () => "When hiring becomes a constant, a proper ATS with analytics beats a manual board. Worth it once you are hiring several roles at once.",
   },
   {
@@ -434,10 +439,6 @@ function buildStack(answers) {
   const has = (x) => tags.has(x);
   const wrapped = { has };
   const picked = CATALOGUE.filter((tool) => tool.when(wrapped, answers));
-  const LAYER_ORDER = [
-    "Foundation", "Communication", "Growth", "Design",
-    "Product", "Operations", "Customer Support", "Finance", "People",
-  ];
   return LAYER_ORDER.map((layer) => ({
     layer, tools: picked.filter((t) => t.layer === layer),
   })).filter((l) => l.tools.length > 0);
@@ -487,19 +488,79 @@ function buildPlainText(answers, stack) {
 
 const STEP_KEYS = QUESTIONS.map((q) => q.id);
 
-const STACK_PREVIEW = [
-  { label: "Foundation", tag: "wiki", layer: "Foundation" },
-  { label: "Growth", tag: "gtm", layer: "Growth" },
-  { label: "Product", tag: "roadmap", layer: "Product" },
-  { label: "Operations", tag: "automate", layer: "Operations" },
-  { label: "Finance", tag: "runway", layer: "Finance" },
-];
+// ---------------------------------------------------------------------------
+// Presentation helpers
+// ---------------------------------------------------------------------------
+
+function useCountUp(target, run, reduced) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!run) { setV(0); return; }
+    if (reduced) { setV(target); return; }
+    let raf = 0;
+    const t0 = performance.now();
+    const dur = 900;
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      setV(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, run, reduced]);
+  return v;
+}
+
+function IsoStack({ items, size = 200, gap = 20, tilt = true, reduced, showDim = false }) {
+  const rigRef = useRef(null);
+  function onMove(e) {
+    if (!tilt || reduced || !rigRef.current) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const dx = (e.clientX - r.left) / r.width - 0.5;
+    const dy = (e.clientY - r.top) / r.height - 0.5;
+    rigRef.current.style.transform = `rotateX(${57 + dy * -9}deg) rotateZ(${-45 + dx * 11}deg)`;
+  }
+  function onLeave() {
+    if (rigRef.current) rigRef.current.style.transform = "rotateX(57deg) rotateZ(-45deg)";
+  }
+  const stackDepth = items.length * gap;
+  return (
+    <div onMouseMove={onMove} onMouseLeave={onLeave}
+      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 26, width: "100%" }}>
+      <div className={reduced ? "" : "iso-float"} style={{
+        width: size * 1.5, height: size * 0.95 + stackDepth + 50,
+        display: "flex", alignItems: "flex-end", justifyContent: "center",
+        perspective: 1400, paddingBottom: 20,
+      }}>
+        <div ref={rigRef} className="iso-rig" style={{
+          width: size, height: size, transformStyle: "preserve-3d",
+          transform: "rotateX(57deg) rotateZ(-45deg)", transition: "transform .45s ease",
+          marginBottom: size * 0.18,
+        }}>
+          {items.map((name, i) => (
+            <div key={name} className="iso-plate"
+              style={{ "--z": `${i * gap}px`, animationDelay: reduced ? "0s" : `${0.1 + i * 0.09}s` }}>
+              <span className="iso-tag">{name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      {showDim && (
+        <div className="dim" aria-hidden style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span className="dim-line" style={{ height: Math.max(90, stackDepth + 40) }} />
+          <span className="dim-label">{items.length} layers</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function App() {
   const [step, setStep] = useState(-1);
   const [answers, setAnswers] = useState({});
   const [reduced, setReduced] = useState(false);
   const [copied, setCopied] = useState(false);
+  const spotRef = useRef(null);
 
   useEffect(() => {
     if (!document.getElementById(FONT_LINK_ID)) {
@@ -507,13 +568,48 @@ export default function App() {
       l.id = FONT_LINK_ID;
       l.rel = "stylesheet";
       l.href =
-        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap";
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap";
       document.head.appendChild(l);
     }
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
+  // Cursor spotlight
+  useEffect(() => {
+    const el = spotRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onMove = (e) => {
+      const x = e.clientX, y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(() => {
+        el.style.background = `radial-gradient(560px circle at ${x}px ${y}px, rgba(253,54,110,0.05), transparent 65%)`;
+        raf = 0;
+      });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => { window.removeEventListener("mousemove", onMove); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+
   const done = step >= QUESTIONS.length;
+
+  // Keyboard: 1–9 selects an option, Backspace/Escape goes back
+  useEffect(() => {
+    function onKey(e) {
+      if (step < 0 || done) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key >= "1" && e.key <= "9") {
+        const idx = Number(e.key) - 1;
+        const opts = QUESTIONS[step].options;
+        if (idx < opts.length) choose(QUESTIONS[step].id, opts[idx].value);
+      } else if ((e.key === "Backspace" || e.key === "Escape") && step > 0) {
+        e.preventDefault();
+        setStep((s) => s - 1);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
   const stack = useMemo(() => (done ? buildStack(answers) : []), [done, answers]);
   const answeredLayers = useMemo(() => {
     const partial = {};
@@ -522,6 +618,7 @@ export default function App() {
     return buildStack(partial);
   }, [answers, step]);
   const totalPicks = useMemo(() => stack.reduce((n, g) => n + g.tools.length, 0), [stack]);
+  const shownPicks = useCountUp(totalPicks, done, reduced);
 
   function choose(qid, value) {
     setAnswers((prev) => ({ ...prev, [qid]: value }));
@@ -546,66 +643,129 @@ export default function App() {
   }
 
   const C = {
-    ink: "#0A0A0D", inkSoft: "#1C1C22", panel: "#141417", panelLine: "#26262C",
-    amber: "#FD366E", sage: "#3ECF8E", text: "#F1F1F4", muted: "#93939D",
-    onInk: "#F1F1F4", onInkMuted: "#8B8B95", bodyText: "#C9C9D1",
+    ink: "#0A0B0E", inkSoft: "#1E1F26", panel: "#131419", panelLine: "#26272E",
+    pink: "#FD366E", onInk: "#F1F1F4", onInkMuted: "#8B8B95", bodyText: "#C9C9D1",
+    muted: "#93939D",
   };
-  const layerColor = (layer) => ({
-    Foundation: C.sage, Communication: "#5B9DFF", Growth: C.amber, Design: "#FF9F5B",
-    Product: "#B98CFF", Operations: "#42D6D0", "Customer Support": "#FFD166",
-    Finance: "#A3E635", People: "#FF6FA5",
-  }[layer] || C.amber);
+  const mono = "'JetBrains Mono', ui-monospace, monospace";
+  const grotesk = "'Space Grotesk', sans-serif";
 
   return (
     <div style={{
       minHeight: "100vh",
-      background: `radial-gradient(1100px 600px at 12% -10%, rgba(253,54,110,0.20), transparent 60%), radial-gradient(900px 520px at 92% 4%, rgba(91,157,255,0.14), transparent 55%), ${C.ink}`,
+      background: `radial-gradient(1000px 540px at 14% -8%, rgba(253,54,110,0.14), transparent 60%), radial-gradient(820px 480px at 90% 0%, rgba(91,157,255,0.07), transparent 55%), ${C.ink}`,
       color: C.onInk,
       fontFamily: "'Inter', system-ui, sans-serif", display: "flex",
       justifyContent: "center", padding: "clamp(16px, 4vw, 48px)", boxSizing: "border-box",
+      position: "relative", overflow: "hidden",
     }}>
       <style>{`
         * { box-sizing: border-box; }
-        .os-btn:focus-visible { outline: 2px solid ${C.amber}; outline-offset: 3px; }
-        a.os-link:focus-visible { outline: 2px solid ${C.amber}; outline-offset: 2px; }
-        @keyframes riseIn { from { opacity: 0; transform: translateY(10px);} to {opacity:1; transform:none;} }
-        @keyframes layerSlide { from { opacity: 0; transform: translateX(-8px);} to {opacity:1; transform:none;} }
-        @keyframes stackRowCycle {
-          0% { opacity: 0; transform: translateX(28px); }
-          10% { opacity: 1; transform: translateX(0); }
-          75% { opacity: 1; transform: translateX(0); }
-          90% { opacity: 0; transform: translateX(-10px); }
-          100% { opacity: 0; transform: translateX(-10px); }
+        ::selection { background: ${C.pink}; color: #fff; }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: ${C.ink}; }
+        ::-webkit-scrollbar-thumb { background: #2A2B33; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${C.pink}; }
+        .os-btn:focus-visible { outline: 2px solid ${C.pink}; outline-offset: 3px; }
+        a.os-link:focus-visible { outline: 2px solid ${C.pink}; outline-offset: 2px; }
+
+        .bg-grid { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+          background-size: 64px 64px;
+          mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, black 25%, transparent 80%);
+          -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, black 25%, transparent 80%);
         }
-        @keyframes growLine { 0% { transform: scaleY(0); } 30% { transform: scaleY(1); } 100% { transform: scaleY(1); } }
-        .rise { animation: riseIn .45s cubic-bezier(.2,.7,.2,1) both; }
+        .bg-spot { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+        @keyframes riseIn { from { opacity: 0; transform: translateY(12px);} to {opacity:1; transform:none;} }
+        @keyframes layerSlide { from { opacity: 0; transform: translateX(-8px);} to {opacity:1; transform:none;} }
+        @keyframes wordUp { from { opacity: 0; transform: translateY(14px);} to {opacity:1; transform:none;} }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulseDot { 0%,100% { box-shadow: 0 0 0 0 rgba(253,54,110,.45);} 60% { box-shadow: 0 0 0 7px rgba(253,54,110,0);} }
+        @keyframes isoFloat { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+        @keyframes plateIn { from { opacity: 0; transform: translateZ(calc(var(--z) + 130px)); } to { opacity: 1; transform: translateZ(var(--z)); } }
+        @keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 140%; } }
+
+        .rise { animation: riseIn .5s cubic-bezier(.2,.7,.2,1) both; }
         .layer-in { animation: layerSlide .4s cubic-bezier(.2,.7,.2,1) both; }
-        .stack-preview-row { animation: stackRowCycle 5s ease-in-out infinite; }
-        .stack-preview-line { animation: growLine 5s ease-in-out infinite; transform-origin: top; }
-        @media (prefers-reduced-motion: reduce){ .rise,.layer-in,.stack-preview-row,.stack-preview-line{animation:none;} }
-        .opt:hover { border-color: ${C.amber} !important; transform: translateY(-2px); background: rgba(253,54,110,0.06) !important; }
-        .opt { transition: transform .15s ease, border-color .15s ease, background .15s ease; }
-        .tool-link { color: ${C.muted}; text-decoration: none; border-bottom: 1px dotted ${C.muted}; }
-        .tool-link:hover { color: ${C.amber}; border-bottom-color: ${C.amber}; }
+        .reveal-word { display: inline-block; animation: wordUp .5s cubic-bezier(.2,.7,.2,1) backwards; }
+        .blink { animation: blink 1.1s steps(2) infinite; }
+        .iso-float { animation: isoFloat 7s ease-in-out infinite; }
+
+        .iso-plate { position: absolute; inset: 0; border-radius: 18%;
+          transform: translateZ(var(--z));
+          background: linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.015));
+          border: 1px solid rgba(255,255,255,.13);
+          box-shadow: 0 24px 48px rgba(0,0,0,.45);
+          animation: plateIn .8s cubic-bezier(.22,.9,.24,1.12) backwards;
+          transition: transform .3s ease, border-color .3s ease, background .3s ease;
+        }
+        .iso-plate:hover { transform: translateZ(calc(var(--z) + 16px)); border-color: rgba(253,54,110,.65); background: linear-gradient(135deg, rgba(253,54,110,.12), rgba(255,255,255,.02)); }
+        .iso-plate:last-child { border-color: rgba(253,54,110,.45); box-shadow: 0 24px 48px rgba(0,0,0,.45), 0 0 44px rgba(253,54,110,.14); }
+        .iso-tag { position: absolute; top: 50%; left: 50%;
+          transform: translate(-50%,-50%) rotateZ(45deg) rotateX(-57deg);
+          font-family: ${mono}; font-size: 10px; font-weight: 500; letter-spacing: .16em;
+          text-transform: uppercase; color: rgba(241,241,244,.9); white-space: nowrap;
+          opacity: 0; transition: opacity .25s ease; pointer-events: none;
+        }
+        .iso-plate:hover .iso-tag { opacity: 1; }
+
+        .dim-line { width: 1px; background: rgba(255,255,255,.22); position: relative; display: inline-block; }
+        .dim-line::before, .dim-line::after { content: ""; position: absolute; left: -4px; width: 9px; height: 1px; background: rgba(255,255,255,.22); }
+        .dim-line::before { top: 0; } .dim-line::after { bottom: 0; }
+        .dim-label { writing-mode: vertical-rl; font-family: ${mono}; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: ${C.onInkMuted}; }
+
+        @media (prefers-reduced-motion: reduce){
+          .rise,.layer-in,.reveal-word,.blink,.iso-float,.iso-plate,.os-btn-primary::after { animation: none !important; }
+        }
+
+        .opt { position: relative; transition: transform .16s ease, border-color .16s ease, background .16s ease; }
+        .opt::before, .opt::after { content: ""; position: absolute; width: 15px; height: 15px; opacity: 0; transition: opacity .18s ease; pointer-events: none; }
+        .opt::before { top: -1px; left: -1px; border-top: 2px solid ${C.pink}; border-left: 2px solid ${C.pink}; border-top-left-radius: 13px; }
+        .opt::after { bottom: -1px; right: -1px; border-bottom: 2px solid ${C.pink}; border-right: 2px solid ${C.pink}; border-bottom-right-radius: 13px; }
+        .opt:hover { border-color: rgba(253,54,110,.55) !important; transform: translateX(6px); background: rgba(253,54,110,0.05) !important; }
+        .opt:hover::before, .opt:hover::after { opacity: 1; }
+        .opt:hover .opt-arrow { transform: translateX(4px); color: ${C.pink}; }
+        .opt-arrow { transition: transform .16s ease, color .16s ease; }
+        .opt:hover .opt-num { color: ${C.pink}; }
+
+        .tool-link { color: ${C.onInk}; text-decoration: none; border-bottom: 1px dotted ${C.muted}; }
+        .tool-link:hover { color: ${C.pink}; border-bottom-color: ${C.pink}; }
+
+        .os-btn-primary { position: relative; overflow: hidden; }
         .os-btn-primary:hover { filter: brightness(1.08); }
+        .os-btn-primary::after { content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+          background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+          transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; }
+
+        .results-iso { display: block; }
+        @media (max-width: 960px) { .results-iso { display: none; } }
+
         @media print {
           body { background: #fff !important; }
-          .no-print { display: none !important; }
-          .print-panel { break-inside: avoid; }
+          .no-print, .bg-grid, .bg-spot { display: none !important; }
+          .print-panel { break-inside: avoid; background: #fff !important; border-color: #ddd !important; }
+          .print-panel * { color: #111 !important; border-color: #ccc !important; background: transparent !important; }
         }
       `}</style>
 
+      <div aria-hidden className="bg-grid" />
+      <div aria-hidden ref={spotRef} className="bg-spot" />
+
       <div style={{
         width: "100%", maxWidth: 1120, display: "flex", flexDirection: "column",
-        minHeight: "calc(100vh - clamp(32px, 8vw, 96px))",
+        minHeight: "calc(100vh - clamp(32px, 8vw, 96px))", position: "relative", zIndex: 1,
       }}>
+        {/* ============ HEADER ============ */}
         <div style={{
           display: "flex", alignItems: "baseline", justifyContent: "space-between",
-          gap: 16, flexWrap: "wrap", marginBottom: "clamp(20px, 4vw, 40px)",
+          gap: 16, flexWrap: "wrap",
         }}>
           <div>
             <div style={{
-              fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+              fontFamily: grotesk, fontWeight: 700,
               fontSize: "clamp(20px, 3vw, 26px)", letterSpacing: "-0.02em",
             }}>Startup Ops Stack</div>
             <div style={{ color: C.onInkMuted, fontSize: 13, marginTop: 4 }}>
@@ -618,194 +778,265 @@ export default function App() {
           }}>by Sanyukta Indani</div>
         </div>
 
+        {/* ============ SYSTEM TICKER ============ */}
+        <div className="no-print" style={{
+          marginTop: 14, marginBottom: "clamp(18px, 3.5vw, 36px)",
+          borderTop: `1px solid ${C.inkSoft}`, paddingTop: 10,
+          fontFamily: mono, fontSize: 10.5, letterSpacing: "0.18em", textTransform: "uppercase",
+          color: C.onInkMuted, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap",
+        }}>
+          <span style={{ color: C.pink }}>●</span>
+          <span>{CATALOGUE.length} tools</span>
+          <span style={{ opacity: .4 }}>/</span>
+          <span>{LAYER_ORDER.length} layers</span>
+          <span style={{ opacity: .4 }}>/</span>
+          <span>gbp</span>
+          <span style={{ opacity: .4 }}>/</span>
+          <span>pricing verified {PRICING_VERIFIED}</span>
+          <span className="blink" style={{ color: C.pink }}>▍</span>
+        </div>
+
+        {/* ============ PROGRESS STATIONS ============ */}
         {step >= 0 && !done && (
-          <div className="no-print" style={{ display: "flex", gap: 6, marginBottom: 28 }}>
+          <div className="no-print" style={{ display: "flex", alignItems: "center", marginBottom: 34, maxWidth: 560 }}>
             {QUESTIONS.map((q, i) => (
-              <div key={q.id} style={{
-                flex: 1, height: 3, borderRadius: 2,
-                background: i <= step ? C.amber : C.inkSoft, transition: "background .3s ease",
-              }} />
+              <div key={q.id} style={{ display: "flex", alignItems: "center", flex: i < QUESTIONS.length - 1 ? 1 : "none" }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: mono, fontSize: 10, fontWeight: 700,
+                  background: i < step ? C.pink : "transparent",
+                  color: i < step ? "#fff" : i === step ? C.pink : C.onInkMuted,
+                  border: `1px solid ${i <= step ? C.pink : C.inkSoft}`,
+                  animation: i === step && !reduced ? "pulseDot 2s ease-out infinite" : "none",
+                  transition: "background .3s ease, color .3s ease, border-color .3s ease",
+                }}>{i + 1}</div>
+                {i < QUESTIONS.length - 1 && (
+                  <div style={{ flex: 1, height: 1, background: i < step ? C.pink : C.inkSoft, transition: "background .3s ease" }} />
+                )}
+              </div>
             ))}
           </div>
         )}
 
+        {/* ============ MAIN ============ */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <div style={{
           display: "grid",
-          gridTemplateColumns: done ? "1fr" : "minmax(0, 1.15fr) minmax(0, 0.85fr)",
-          gap: "clamp(20px, 3vw, 40px)", alignItems: "start",
+          gridTemplateColumns: done ? "1fr" : "minmax(0, 1.1fr) minmax(0, 0.9fr)",
+          gap: "clamp(20px, 3vw, 44px)", alignItems: done ? "start" : "center",
         }}>
           <div>
+            {/* ---------- LANDING ---------- */}
             {step === -1 && (
               <div className="rise">
+                <div style={{
+                  fontFamily: mono, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
+                  color: C.pink, marginBottom: 18,
+                }}>Answer 5 → assemble 1</div>
                 <h1 style={{
-                  fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(38px, 6.5vw, 68px)",
-                  lineHeight: 1.05, letterSpacing: "-0.03em", margin: "0 0 20px", fontWeight: 700,
-                }}>Five questions.<br />One tailored software <span style={{ color: C.amber }}>stack</span>.</h1>
+                  fontFamily: grotesk, fontSize: "clamp(40px, 6.5vw, 74px)",
+                  lineHeight: 1.02, letterSpacing: "-0.03em", margin: "0 0 22px", fontWeight: 700,
+                }}>Five questions.<br />One tailored software <span style={{ color: C.pink }}>stack</span>.</h1>
                 <p style={{
                   color: C.onInkMuted, fontSize: "clamp(15px, 2vw, 18px)", lineHeight: 1.6,
-                  maxWidth: 560, margin: "0 0 28px",
+                  maxWidth: 560, margin: "0 0 30px",
                 }}>
                   Built around your stage, your biggest bottleneck, and your budget.
                 </p>
                 <button className="os-btn os-btn-primary" onClick={() => setStep(0)} style={{
-                  background: `linear-gradient(135deg, ${C.amber}, #FF6B9D)`, color: "#fff", border: "none", borderRadius: 999,
-                  padding: "14px 26px", fontSize: 15, fontWeight: 600,
-                  fontFamily: "'Space Grotesk', sans-serif", cursor: "pointer",
+                  background: `linear-gradient(135deg, ${C.pink}, #FF6B9D)`, color: "#fff", border: "none", borderRadius: 999,
+                  padding: "15px 28px", fontSize: 15, fontWeight: 600,
+                  fontFamily: grotesk, cursor: "pointer",
                   boxShadow: "0 8px 24px rgba(253,54,110,0.35)",
                 }}>Build my stack →</button>
-                <p style={{ color: C.onInkMuted, fontSize: 12.5, marginTop: 24, maxWidth: 520, lineHeight: 1.5 }}>
+                <p style={{ color: C.onInkMuted, fontSize: 12.5, marginTop: 26, maxWidth: 520, lineHeight: 1.5 }}>
                   Every recommendation includes why it fits and when the free version is enough.
                 </p>
               </div>
             )}
 
+            {/* ---------- QUESTIONS ---------- */}
             {step >= 0 && !done && (
               <div className="rise" key={step}>
                 <div style={{
-                  fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: C.amber, fontWeight: 600, marginBottom: 14,
+                  fontFamily: mono, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: C.pink, fontWeight: 500, marginBottom: 14,
                 }}>
-                  {String(step + 1).padStart(2, "0")} / {String(QUESTIONS.length).padStart(2, "0")} · {QUESTIONS[step].label}
+                  Q{String(step + 1).padStart(2, "0")} — {QUESTIONS[step].label}
                 </div>
                 <h2 style={{
-                  fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(24px, 3.4vw, 34px)",
-                  lineHeight: 1.15, letterSpacing: "-0.02em", margin: "0 0 10px", fontWeight: 600,
+                  fontFamily: grotesk, fontSize: "clamp(26px, 3.6vw, 38px)",
+                  lineHeight: 1.12, letterSpacing: "-0.02em", margin: "0 0 10px", fontWeight: 600,
                 }}>{QUESTIONS[step].prompt}</h2>
                 <p style={{ color: C.onInkMuted, fontSize: 14, lineHeight: 1.5, margin: "0 0 24px", maxWidth: 480 }}>
                   {QUESTIONS[step].help}
                 </p>
                 <div style={{ display: "grid", gap: 10 }}>
-                  {QUESTIONS[step].options.map((o) => {
+                  {QUESTIONS[step].options.map((o, oi) => {
                     const active = answers[QUESTIONS[step].id] === o.value;
                     return (
                       <button key={o.value} className="os-btn opt"
                         onClick={() => choose(QUESTIONS[step].id, o.value)}
                         style={{
                           textAlign: "left", background: active ? "rgba(253,54,110,0.08)" : "rgba(255,255,255,0.02)",
-                          border: `1px solid ${active ? C.amber : C.inkSoft}`, borderRadius: 14,
-                          padding: "16px 18px", color: C.onInk, cursor: "pointer",
-                          display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
+                          border: `1px solid ${active ? C.pink : C.inkSoft}`, borderRadius: 14,
+                          padding: "15px 18px", color: C.onInk, cursor: "pointer",
+                          display: "flex", alignItems: "center", gap: 16,
                         }}>
-                        <span>
+                        <span className="opt-num" style={{
+                          fontFamily: mono, fontSize: 12, color: C.onInkMuted, flexShrink: 0,
+                          width: 22, transition: "color .16s ease",
+                        }}>{String(oi + 1).padStart(2, "0")}</span>
+                        <span style={{ flex: 1 }}>
                           <span style={{ fontWeight: 600, fontSize: 15.5 }}>{o.label}</span>
                           <span style={{ display: "block", color: C.onInkMuted, fontSize: 13, marginTop: 2 }}>{o.sub}</span>
                         </span>
-                        <span style={{ color: C.onInkMuted, fontSize: 18 }}>→</span>
+                        <span className="opt-arrow" style={{ color: C.onInkMuted, fontSize: 18 }}>→</span>
                       </button>
                     );
                   })}
                 </div>
-                {step > 0 && (
-                  <button className="os-btn" onClick={() => setStep((s) => s - 1)} style={{
-                    marginTop: 20, background: "none", border: "none", color: C.onInkMuted,
-                    fontSize: 13, cursor: "pointer", padding: 0,
-                  }}>← Back</button>
-                )}
+                <div style={{
+                  marginTop: 20, display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+                }}>
+                  {step > 0 && (
+                    <button className="os-btn" onClick={() => setStep((s) => s - 1)} style={{
+                      background: "none", border: "none", color: C.onInkMuted,
+                      fontSize: 13, cursor: "pointer", padding: 0,
+                    }}>← Back</button>
+                  )}
+                  <span style={{
+                    fontFamily: mono, fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase",
+                    color: "rgba(139,139,149,0.6)",
+                  }}>Keys 1–{QUESTIONS[step].options.length} to choose{step > 0 ? " · backspace to go back" : ""}</span>
+                </div>
               </div>
             )}
 
+            {/* ---------- RESULTS ---------- */}
             {done && (
               <div className="rise">
-                <div style={{
-                  fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: C.amber, fontWeight: 600, marginBottom: 12,
-                }}>Your recommended stack · {totalPicks} tools across {stack.length} layers</div>
-                <h2 style={{
-                  fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(22px, 3vw, 30px)",
-                  lineHeight: 1.2, letterSpacing: "-0.02em", margin: "0 0 14px", fontWeight: 600, maxWidth: 720,
-                }}>{headline(answers)}</h2>
+                <div style={{ display: "flex", gap: 24, alignItems: "flex-start", justifyContent: "space-between" }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontFamily: mono, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                      color: C.pink, fontWeight: 500, marginBottom: 12,
+                    }}>Configuration complete <span className="blink">▍</span></div>
+                    <div style={{
+                      fontFamily: mono, fontSize: 13, color: C.onInkMuted, marginBottom: 14,
+                    }}>
+                      <span style={{ color: C.onInk, fontWeight: 700, fontSize: 15 }}>{shownPicks}</span> tools
+                      <span style={{ opacity: .4 }}> / </span>
+                      <span style={{ color: C.onInk, fontWeight: 700, fontSize: 15 }}>{stack.length}</span> layers
+                    </div>
+                    <h2 style={{
+                      fontFamily: grotesk, fontSize: "clamp(24px, 3.2vw, 34px)",
+                      lineHeight: 1.18, letterSpacing: "-0.02em", margin: "0 0 18px", fontWeight: 600, maxWidth: 720,
+                    }}>
+                      {headline(answers).split(" ").map((w, i) => (
+                        <span key={i} className="reveal-word" style={{ animationDelay: reduced ? "0s" : `${i * 0.03}s` }}>{w}&nbsp;</span>
+                      ))}
+                    </h2>
+                  </div>
+                  <div className="results-iso no-print" style={{ width: 220, flexShrink: 0 }}>
+                    <IsoStack items={stack.map((g) => g.layer)} size={110} gap={13} reduced={reduced} />
+                  </div>
+                </div>
 
                 <div className="no-print" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 22 }}>
                   <button className="os-btn os-btn-primary" onClick={copyStack} style={{
-                    background: copied ? C.sage : `linear-gradient(135deg, ${C.amber}, #FF6B9D)`,
+                    background: copied ? "#3ECF8E" : `linear-gradient(135deg, ${C.pink}, #FF6B9D)`,
                     color: "#fff", border: "none", borderRadius: 999,
                     padding: "10px 20px", fontSize: 13.5, fontWeight: 600,
-                    fontFamily: "'Space Grotesk', sans-serif", cursor: "pointer", transition: "background .2s ease",
+                    fontFamily: grotesk, cursor: "pointer", transition: "background .2s ease",
                     boxShadow: copied ? "none" : "0 6px 18px rgba(253,54,110,0.3)",
                   }}>{copied ? "Copied ✓" : "Copy stack"}</button>
                   <button className="os-btn" onClick={() => window.print()} style={{
                     background: "rgba(255,255,255,0.03)", color: C.onInk, border: `1px solid ${C.inkSoft}`, borderRadius: 999,
                     padding: "10px 20px", fontSize: 13.5, fontWeight: 600,
-                    fontFamily: "'Space Grotesk', sans-serif", cursor: "pointer",
+                    fontFamily: grotesk, cursor: "pointer",
                   }}>Save as PDF</button>
                 </div>
 
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 30 }}>
                   {QUESTIONS.map((q) => {
                     const opt = q.options.find((o) => o.value === answers[q.id]);
                     return (
                       <span key={q.id} style={{
                         fontSize: 12, color: C.onInkMuted, border: `1px solid ${C.inkSoft}`,
-                        borderRadius: 999, padding: "5px 11px",
-                      }}>{q.label}: <span style={{ color: C.onInk }}>{opt?.label}</span></span>
+                        borderRadius: 999, padding: "5px 12px",
+                      }}>
+                        <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>{q.label}</span>
+                        {" "}<span style={{ color: C.onInk }}>{opt?.label}</span>
+                      </span>
                     );
                   })}
                 </div>
 
-                <div style={{ display: "grid", gap: 14 }}>
+                <div style={{ display: "grid", gap: 16 }}>
                   {stack.map((group, gi) => (
                     <div key={group.layer} className="layer-in print-panel" style={{
                       animationDelay: reduced ? "0s" : `${gi * 0.05}s`, background: C.panel,
-                      color: C.text, borderRadius: 20, padding: "18px 20px", border: `1px solid ${C.panelLine}`,
+                      borderRadius: 20, padding: "20px 22px", border: `1px solid ${C.panelLine}`,
+                      display: "grid", gridTemplateColumns: "minmax(52px, 64px) 1fr", gap: 18,
                     }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                        <span style={{
-                          width: 22, height: 22, borderRadius: 7, background: `${layerColor(group.layer)}26`,
-                          border: `1px solid ${layerColor(group.layer)}55`, display: "flex", alignItems: "center", justifyContent: "center",
-                        }}>
-                          <span style={{ width: 8, height: 8, borderRadius: "50%", background: layerColor(group.layer) }} />
-                        </span>
-                        <span style={{
-                          fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600,
-                          fontSize: 15, letterSpacing: "-0.01em",
-                        }}>{group.layer}</span>
-                        <span style={{ color: C.muted, fontSize: 12 }}>
-                          {group.tools.length} {group.tools.length === 1 ? "pick" : "picks"}
-                        </span>
-                      </div>
-                      <div style={{ display: "grid", gap: 12 }}>
-                        {group.tools.map((tool) => (
-                          <div key={tool.name} style={{
-                            padding: "14px 16px", borderRadius: 14,
-                            background: `${layerColor(group.layer)}0D`,
-                            borderLeft: `3px solid ${layerColor(group.layer)}55`,
-                          }}>
-                            <div style={{
-                              display: "flex", justifyContent: "space-between",
-                              alignItems: "baseline", gap: 12, flexWrap: "wrap",
+                      <div aria-hidden style={{
+                        fontFamily: mono, fontWeight: 700, fontSize: "clamp(30px, 4vw, 44px)",
+                        color: "rgba(255,255,255,0.08)", lineHeight: 1, paddingTop: 2, userSelect: "none",
+                      }}>{String(gi + 1).padStart(2, "0")}</div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+                          <span style={{
+                            fontFamily: grotesk, fontWeight: 600,
+                            fontSize: 16, letterSpacing: "-0.01em",
+                          }}>{group.layer}</span>
+                          <span style={{ fontFamily: mono, color: C.muted, fontSize: 11, letterSpacing: "0.08em" }}>
+                            {group.tools.length} {group.tools.length === 1 ? "pick" : "picks"}
+                          </span>
+                        </div>
+                        <div style={{ display: "grid", gap: 0 }}>
+                          {group.tools.map((tool, ti) => (
+                            <div key={tool.name} style={{
+                              padding: "14px 0",
+                              borderTop: ti > 0 ? `1px solid ${C.panelLine}` : "none",
                             }}>
-                              <a className="os-link tool-link" href={tool.url} target="_blank" rel="noopener noreferrer"
-                                style={{ fontWeight: 600, fontSize: 16 }}>{tool.name}</a>
-                              <span style={{ color: C.muted, fontSize: 12.5 }}>{tool.price}</span>
-                            </div>
-                            <div style={{ color: C.muted, fontSize: 13, fontWeight: 500, marginTop: 2 }}>{tool.role}</div>
-                            <div style={{ color: C.bodyText, fontSize: 13.5, lineHeight: 1.5, marginTop: 6 }}>
-                              {tool.reason(answers)}
-                            </div>
-                            {tool.vsObvious && (
                               <div style={{
-                                color: C.muted, fontSize: 12.5, lineHeight: 1.5, marginTop: 6, fontStyle: "italic",
-                              }}>Why this: {tool.vsObvious}</div>
-                            )}
-                            {tool.tip && (
-                              <div style={{
-                                marginTop: 8, fontSize: 12.5, lineHeight: 1.45, color: C.bodyText,
-                                background: `${layerColor(group.layer)}1A`, borderRadius: 8, padding: "8px 10px",
-                              }}><span style={{ fontWeight: 600 }}>Tip · </span>{tool.tip}</div>
-                            )}
-                          </div>
-                        ))}
+                                display: "flex", justifyContent: "space-between",
+                                alignItems: "baseline", gap: 12, flexWrap: "wrap",
+                              }}>
+                                <a className="os-link tool-link" href={tool.url} target="_blank" rel="noopener noreferrer"
+                                  style={{ fontWeight: 600, fontSize: 15.5 }}>{tool.name}</a>
+                                <span style={{ fontFamily: mono, color: C.muted, fontSize: 11.5 }}>{tool.price}</span>
+                              </div>
+                              <div style={{ color: C.muted, fontSize: 12.5, fontWeight: 500, marginTop: 3 }}>{tool.role}</div>
+                              <div style={{ color: C.bodyText, fontSize: 13.5, lineHeight: 1.55, marginTop: 7 }}>
+                                {tool.reason(answers)}
+                              </div>
+                              {tool.vsObvious && (
+                                <div style={{
+                                  color: C.muted, fontSize: 12.5, lineHeight: 1.5, marginTop: 6, fontStyle: "italic",
+                                }}>Why this: {tool.vsObvious}</div>
+                              )}
+                              {tool.tip && (
+                                <div style={{
+                                  marginTop: 9, fontSize: 12.5, lineHeight: 1.5, color: C.bodyText,
+                                  borderLeft: `2px solid ${C.pink}`, paddingLeft: 12,
+                                }}><span style={{ fontWeight: 600, color: C.onInk }}>Tip · </span>{tool.tip}</div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="no-print" style={{ marginTop: 24, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <div className="no-print" style={{ marginTop: 26, display: "flex", gap: 14, flexWrap: "wrap" }}>
                   <button className="os-btn os-btn-primary" onClick={restart} style={{
-                    background: `linear-gradient(135deg, ${C.amber}, #FF6B9D)`, color: "#fff", border: "none", borderRadius: 999,
+                    background: `linear-gradient(135deg, ${C.pink}, #FF6B9D)`, color: "#fff", border: "none", borderRadius: 999,
                     padding: "12px 22px", fontSize: 14, fontWeight: 600,
-                    fontFamily: "'Space Grotesk', sans-serif", cursor: "pointer",
+                    fontFamily: grotesk, cursor: "pointer",
                     boxShadow: "0 8px 20px rgba(253,54,110,0.3)",
                   }}>Start over</button>
                   <div style={{
@@ -817,7 +1048,7 @@ export default function App() {
                 </div>
 
                 <div style={{
-                  marginTop: 22, paddingTop: 16, borderTop: `1px solid ${C.inkSoft}`,
+                  marginTop: 24, paddingTop: 16, borderTop: `1px solid ${C.inkSoft}`,
                   color: C.onInkMuted, fontSize: 12, lineHeight: 1.5,
                 }}>
                   Pricing is indicative, shown in GBP as approximate tiers, verified {PRICING_VERIFIED}. SaaS pricing changes often,
@@ -827,89 +1058,77 @@ export default function App() {
             )}
           </div>
 
+          {/* ---------- RIGHT PANEL ---------- */}
           {!done && (
-            <div className="no-print" style={{
-              position: "sticky", top: 24, background: "rgba(255,255,255,0.02)", borderRadius: 20,
-              padding: 20, border: `1px solid ${C.inkSoft}`, minHeight: 320,
-            }}>
+            <div className="no-print">
               {step === -1 ? (
-                <>
+                <div>
+                  <IsoStack items={LAYER_ORDER} size={190} gap={19} reduced={reduced} showDim />
                   <div style={{
-                    fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
-                    color: C.onInkMuted, marginBottom: 20,
-                  }}>Building your stack</div>
-                  <div style={{ position: "relative", paddingLeft: 18 }}>
-                    <span className="stack-preview-line" style={{
-                      position: "absolute", left: 0, top: 4, bottom: 4, width: 2,
-                      background: `linear-gradient(${C.amber}, transparent)`,
-                    }} />
-                    <div style={{ display: "grid", gap: 12 }}>
-                      {STACK_PREVIEW.map((item, i) => (
-                        <div key={item.label} className="stack-preview-row" style={{
-                          animationDelay: reduced ? "0s" : `${i * 0.5}s`,
-                          display: "flex", alignItems: "center", gap: 10,
-                          background: "rgba(255,255,255,0.03)", border: `1px solid ${C.inkSoft}`,
-                          borderRadius: 12, padding: "12px 14px",
-                        }}>
-                          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 14 }}>
-                            {item.label}
-                          </span>
-                          <span style={{
-                            marginLeft: "auto", fontFamily: "ui-monospace, monospace",
-                            fontSize: 11.5, color: C.onInkMuted,
-                          }}>{item.tag}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
+                    textAlign: "center", marginTop: 6,
+                    fontFamily: mono, fontSize: 10.5, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: C.onInkMuted,
+                  }}>The {LAYER_ORDER.length} layers — hover to explore</div>
+                </div>
               ) : (
-                <>
+                <div style={{
+                  position: "sticky", top: 24, background: "rgba(255,255,255,0.02)", borderRadius: 20,
+                  padding: 20, border: `1px solid ${C.inkSoft}`, minHeight: 320,
+                }}>
                   <div style={{
-                    fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
-                    color: C.onInkMuted, marginBottom: 16,
+                    fontFamily: mono, fontSize: 10.5, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: C.onInkMuted, marginBottom: 8,
                   }}>Your stack, assembling</div>
-                  {answeredLayers.length === 0 && (
+                  {answeredLayers.length === 0 ? (
                     <div style={{
                       color: C.onInkMuted, fontSize: 13.5, lineHeight: 1.6, padding: "40px 4px", textAlign: "center",
                     }}>
                       As you answer, the recommended layers stack up here. The more specific your problem, the sharper the picks.
                     </div>
-                  )}
-                  <div style={{ display: "grid", gap: 8 }}>
-                    {answeredLayers.map((group, i) => (
-                      <div key={group.layer} className="layer-in" style={{
-                        animationDelay: reduced ? "0s" : `${i * 0.05}s`, background: "rgba(255,255,255,0.03)",
-                        borderRadius: 10, padding: "12px 14px", borderLeft: `3px solid ${layerColor(group.layer)}`,
-                      }}>
-                        <div style={{
-                          fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13.5, marginBottom: 6,
-                        }}>{group.layer}</div>
-                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                          {group.tools.map((t) => (
-                            <span key={t.name} style={{
-                              fontSize: 12, color: C.onInkMuted, background: "rgba(255,255,255,0.04)",
-                              borderRadius: 6, padding: "3px 8px",
-                            }}>{t.name}</span>
-                          ))}
-                        </div>
+                  ) : (
+                    <>
+                      <IsoStack items={answeredLayers.map((g) => g.layer)} size={120} gap={13} reduced={reduced} tilt={false} />
+                      <div style={{ display: "grid", gap: 6, marginTop: 4 }}>
+                        {answeredLayers.map((group, i) => (
+                          <div key={group.layer} className="layer-in" style={{
+                            animationDelay: reduced ? "0s" : `${i * 0.04}s`,
+                            display: "flex", alignItems: "baseline", gap: 10,
+                            padding: "8px 10px", borderRadius: 8,
+                            background: "rgba(255,255,255,0.025)",
+                          }}>
+                            <span style={{ fontFamily: mono, fontSize: 10, color: C.onInkMuted, flexShrink: 0 }}>
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <span style={{ fontFamily: grotesk, fontWeight: 600, fontSize: 13 }}>{group.layer}</span>
+                            <span style={{ marginLeft: "auto", fontFamily: mono, fontSize: 10.5, color: C.onInkMuted, flexShrink: 0 }}>
+                              {group.tools.length} {group.tools.length === 1 ? "pick" : "picks"}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </>
+                    </>
+                  )}
+                </div>
               )}
             </div>
           )}
         </div>
         </div>
 
+        {/* ============ FOOTER (landing only) ============ */}
         {step === -1 && (
           <div className="no-print" style={{
-            marginTop: 32, paddingTop: 24, borderTop: `1px solid ${C.inkSoft}`,
-            color: C.onInkMuted, fontSize: 12.5, lineHeight: 1.6, maxWidth: 640,
+            marginTop: 32, paddingTop: 22, borderTop: `1px solid ${C.inkSoft}`,
+            display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 20, flexWrap: "wrap",
           }}>
-            Shaped by working alongside founders at two early stage startups, where the
-            right lightweight system usually beat the expensive one nobody kept up.
+            <div style={{ color: C.onInkMuted, fontSize: 12.5, lineHeight: 1.6, maxWidth: 640 }}>
+              Shaped by working alongside founders at two early stage startups, where the
+              right lightweight system usually beat the expensive one nobody kept up.
+            </div>
+            <div style={{
+              fontFamily: mono, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase",
+              color: "rgba(139,139,149,0.55)", flexShrink: 0,
+            }}>UK-first picks · no affiliations</div>
           </div>
         )}
       </div>
